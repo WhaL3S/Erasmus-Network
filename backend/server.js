@@ -1,12 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-
-// Import routes
-// const userRoutes = require('./routes/userRoutes');
+const sequelize = require('./config/sequelize');
 
 const app = express();
-const PORT = process.env.PORT;
+
+sequelize.sync();
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -15,11 +14,13 @@ app.use(cors({
   }));
 app.use(express.json());
 
+// Import routes
+const messageRoutes = require('./routes/messageRoutes');
+
 // Routes
-// app.use('/api/users', userRoutes);
+app.use('/api', messageRoutes);
 
-
-// Starting the server
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
