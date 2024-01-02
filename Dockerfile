@@ -9,11 +9,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     vim \
-    nodejs \
-    npm \
     mysql-server \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js v20.10.0
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 # Expose necessary ports (MySQL: 3306, ...)
 EXPOSE 3306
