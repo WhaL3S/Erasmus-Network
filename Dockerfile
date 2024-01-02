@@ -24,7 +24,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 COPY ./init/init-db.sql /usr/local/bin/init-db.sql
 
 # Run scripts
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Prevent container from shutting down after scripts
 CMD [ "sleep", "infinity" ]
