@@ -9,6 +9,8 @@ import markerIconUrl from 'leaflet/dist/images/marker-icon.png';
 import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
 import ReactDOMServer from 'react-dom/server';
+import countryBoundaries from '../assets/world-administrative-boundaries.json';
+import { GeoJSON } from 'react-leaflet';
 
 const UniversityPopupContent = ({ university }) => {
     return (
@@ -64,8 +66,34 @@ class GeoChart extends Component {
         super(props);
         this.state = {
             universityData: [],
+            loading: true,
         };
     }
+
+    // Function to check if a country has a university and return a color
+    getCountryStyle = (feature) => {
+        const hasUni = this.state.universityData.some(uni => 
+            uni.country === feature.properties.name || uni.country === feature.properties.iso3
+        );
+        console.log(`Property ${feature.properties.name}, Country ${hasUni}`);
+        return {
+            fillColor: hasUni ? this.getRandomColor() : '#FFFFFF', // Fill color is random if there's a uni, otherwise white
+            weight: 1,
+            opacity: 1,
+            color: 'black',
+            fillOpacity: hasUni ? 0.4 : 0.2 // Less opacity if no university
+        };
+    };
+
+    // Function to generate a random color
+    getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
 
     componentDidMount() {
         this.fetchAllUniversityData();
@@ -97,10 +125,14 @@ class GeoChart extends Component {
         const promises = universities.map(uni => this.fetchCoordinates(uni));
         const results = await Promise.all(promises);
         const validUniversityData = results.filter(data => data != null); // Filter out null values
-        this.setState({ universityData: validUniversityData });
+        this.setState({ universityData: validUniversityData, loading: false });
     }
 
     renderMap() {
+        if (this.state.loading) {
+            return <div>Loading...</div>; // Show loading message
+        }
+
         return (
             <MapContainer 
                 center={[0, 0]} 
@@ -118,6 +150,10 @@ class GeoChart extends Component {
                     attribution="&copy; OpenStreetMap contributors"
                 />
                 <MarkerCluster universityData={this.state.universityData} />
+                <GeoJSON
+                    data={countryBoundaries}
+                    style={this.getCountryStyle}
+                />
             </MapContainer>
         );
     }
