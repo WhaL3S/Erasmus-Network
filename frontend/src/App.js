@@ -13,6 +13,7 @@ import Edit from './pages/Application/Edit';
 import Review from './pages/Application/Review';
 import ViewApplications from './pages/Application/ViewApplications';
 import ViewAsList from './pages/Application/ViewAsList';
+import ViewOnMap from './pages/Application/ViewOnMap';
 import Reviews from './pages/Review/Reviews';
 import University from './pages/University/University';
 import ActionLog from './pages/University/ActionLog';
@@ -23,7 +24,7 @@ function App() {
     <BrowserRouter>
         <Routes>
           <Route path="/universities" element={<ViewAsList />} />
-          <Route path="/universities-map" element={<ViewAsList />} />
+          <Route path="/universities-map" element={<ViewOnMap />} />
           <Route path="/universities/university" element={<University />} />
           <Route path="/universities/university/action-log" element={<ActionLog />} />
 

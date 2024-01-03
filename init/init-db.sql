@@ -1,6 +1,6 @@
 -- Create DB
-CREATE DATABASE IF NOT EXISTS erasmusDB;
-USE erasmusDB;
+CREATE DATABASE IF NOT EXISTS erasmus;
+USE erasmus;
 
 DROP TABLE IF EXISTS Evaluation;
 DROP TABLE IF EXISTS Message;
