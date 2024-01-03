@@ -5,8 +5,10 @@ import GeoChart from '../../components/GeoChart';
 
 const ViewOnMap = () => {
     const universities = [
-        { name: 'University 1', country: 'USA', city: 'Washington' },
-        { name: 'University 2', country: 'Lithuania', city: 'Kaunas' },
+        { id: 1, name: 'University 1', country: 'USA', city: 'Washington' },
+        { id: 2, name: 'KTU', country: 'Lithuania', city: 'Kaunas' },
+        { id: 3, name: 'VU', country: 'Lithuania', city: 'Vilnius' },
+        { id: 4, name: 'University 4', country: 'Germany', city: 'Berlin' },
         // ... other universities
     ];
 
