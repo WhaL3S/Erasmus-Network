@@ -42,8 +42,8 @@ const EditDialog = ({ university, onClose, onSave }) => {
                 <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder="Address" />
                 <input type="number" value={rating} onChange={e => setRating(parseFloat(e.target.value))} placeholder="Rating" min="0" max="5" step="0.1" />
                 <div className="button-container">
-                    <button onClick={handleSubmit}>Save</button>
-                    <button onClick={onClose}>Cancel</button>
+                    <button className="confirm-button" onClick={handleSubmit}>Save</button>
+                    <button className="cancel-button" onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>

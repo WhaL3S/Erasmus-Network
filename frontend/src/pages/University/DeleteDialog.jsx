@@ -6,8 +6,8 @@ const DeleteDialog = ({ onClose, onDelete }) => {
             <div className="dialog">
             <h2>Delete Page</h2>
                 <div className="button-container">
-                    <button onClick={onClose}>Cancel</button>
-                    <button onClick={onDelete}>Confirm Delete</button>
+                    <button className="confirm-button" onClick={onDelete}>Confirm Delete</button>
+                    <button className="cancel-button" onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>

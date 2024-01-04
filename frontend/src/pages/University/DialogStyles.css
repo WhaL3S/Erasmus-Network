@@ -41,27 +41,30 @@
     margin-top: 20px;
 }
 
+/* General button styles */
 .dialog button {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    color: white;
 }
 
 .dialog button:hover {
-    background-color: #f0f0f0;
+    opacity: 0.8;
 }
 
-/* Specific styles for Save and Cancel buttons */
-.dialog button:nth-child(1) {
+.confirm-button {
     background-color: #4CAF50; /* Green */
-    color: white;
 }
 
-.dialog button:nth-child(2) {
+.cancel-button {
     background-color: #f44336; /* Red */
-    color: white;
+}
+
+.open-button {
+    background-color: #1E90FF; /* Blue */
 }
 
 .error-message {

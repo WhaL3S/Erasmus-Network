@@ -72,6 +72,24 @@ const University = () => {
             });
     };
 
+    const buttonStyle = {
+        color: 'white',
+        padding: '10px 20px',
+        margin: '10px',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    };
+
+    const buttonContainerStyle = {
+        textAlign: 'center',
+        margin: '20px 0',
+    };
+
+    const infoTextStyle = {
+        fontSize: '1.5rem',
+        marginBottom: '10px',
+    };
+
     /* DIALOG LOGIC */
 
     if (!university) {
@@ -82,53 +100,26 @@ const University = () => {
         <div className='bg-gray-200 h-screen'>
             <Navbar />
             <div className='m-10 bg-white h-3/4 w-11/12 flex flex-col rounded-3xl justify-around items-center' >
-                <div className='w-full m-5 flex flex-row justify-around'>
-                    <p className='text-3xl text-center'>{university.name}</p>
+                <div style={infoTextStyle}><strong>Name:</strong> {university.name}</div>
+                <div style={infoTextStyle}><strong>Location:</strong> {university.city}, {university.country}</div>
+                <div style={infoTextStyle}><strong>Address:</strong> {university.address}</div>
+                <div style={infoTextStyle}><strong>Rating:</strong> {university.rating}</div>
+
+                <div style={buttonContainerStyle}>
+                    <Link className='link-button' to='/apply'>Apply</Link>
+                    <Link className='link-button' to={`/universities/${universityId}/reviews`}>Reviews</Link>
+                    <button className="open-button" style={buttonStyle} onClick={openActionLogDialog}>View Action Log</button>
+                    <button className="open-button" style={buttonStyle} onClick={openEditDialog}>Edit Page</button>
+                    <button className="open-button" style={buttonStyle} onClick={openDeleteDialog}>Delete Page</button>
                 </div>
 
-                <div className='w-full m-5 flex flex-row justify-around'>
-                    <p className='text-3xl text-center'>{university.city}, {university.country}</p>
-                </div>
-
-                <div className='w-full m-5 flex flex-row justify-around'>
-                    <p className='text-3xl text-center'>{university.address}</p>
-                </div>
-
-                <div className='w-full m-5 flex flex-row justify-around'>
-                    <p className='text-3xl text-center'>Rating: {university.rating}</p>
-                </div>
-
-                {/* Links and Dialogs */}
-                <Link className='text-2xl text-center' to='/apply'>Apply</Link>
-                <Link className='text-2xl text-center' to={`/universities/${universityId}/reviews`}>Reviews</Link>
-
-                {/* DIALOGS */}
-                <button onClick={openActionLogDialog}>View Action Log</button>
-                {isActionLogDialogOpen && (
-                    <ActionLogDialog
-                        logs={actionLogs}
-                        onClose={closeActionLogDialog}
-                    />
-                )}
-
-
-                <button onClick={openEditDialog}>Edit Page</button>
-                {isEditDialogOpen && (
-                    <EditDialog
-                        university={university}
-                        onClose={closeEditDialog}
-                        onSave={handleSave}
-                    />
-                )}
-
-                <button onClick={openDeleteDialog}>Delete Page</button>
-                {isDeleteDialogOpen && (
-                    <DeleteDialog universityId={universityId} onClose={closeDeleteDialog} onDelete={handleDelete} />
-                )}
-                {/* DIALOGS */}
+                {/* Dialogs */}
+                {isActionLogDialogOpen && <ActionLogDialog logs={actionLogs} onClose={closeActionLogDialog} />}
+                {isEditDialogOpen && <EditDialog university={university} onClose={closeEditDialog} onSave={handleSave} />}
+                {isDeleteDialogOpen && <DeleteDialog universityId={universityId} onClose={closeDeleteDialog} onDelete={handleDelete} />}
             </div>
         </div>
-    )
+    );
 }
 
 export default University;

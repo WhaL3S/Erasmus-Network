@@ -13,9 +13,23 @@ const universities = [
 const actionLogs = [];
 
 function logAction(universityId, action, details) {
+    if (Object.keys(details).length === 0) {
+        return; // No changes, so don't log
+    }
+
     const timestamp = new Date().toISOString();
-    actionLogs.push({ universityId, timestamp, action, details });
-    console.log(`Action Logged: ${timestamp} - ${action}`, details);
+
+    // Convert ISO string to a more readable format
+    const readableTimestamp = new Date(timestamp).toLocaleString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric', 
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+
+    const formattedDetails = Object.entries(details).map(([key, value]) => `${key}: ${value}`).join(', ');
+    const logEntry = `${action} - Changes: { ${formattedDetails} }`;
+
+    actionLogs.push({ universityId, timestamp: readableTimestamp, action, details: logEntry });
+    console.log(`Action Logged: ${logEntry}`);
 }
 
 // uni reviews - Tomas
@@ -67,8 +81,20 @@ router.put('/universities/:id', async (req, res) => {
         return res.status(404).send('University not found');
     }
 
-    universities[universityIndex] = { ...universities[universityIndex], ...updatedData };
-    logAction(id, 'Edit', { updatedData });
+    // Determine the changes
+    const changes = Object.entries(updatedData).reduce((acc, [key, value]) => {
+        if (universities[universityIndex][key] !== value) {
+            acc[key] = value;
+        }
+        return acc;
+    }, {});
+
+    // Log and update only if there are changes
+    if (Object.keys(changes).length > 0) {
+        universities[universityIndex] = { ...universities[universityIndex], ...changes };
+        logAction(id, 'Edit', changes);
+    }
+
     res.json(universities[universityIndex]);
 });
 
