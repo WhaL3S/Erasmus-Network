@@ -4,7 +4,7 @@ const User = require('./userModel');
 const Chat = require('./chatModel');
 const Message = require('./messageModel');
 //const Student = require('./studentModel'); // Make sure you have this model
-//const University = require('./universityModel'); // Make sure you have this model
+const University = require('./universityModel');
 const Review = require('./reviewModel');  // Import the Review model
 // Define associations
 User.hasMany(Message, { foreignKey: 'sender', as: 'sentMessages' });
@@ -24,4 +24,5 @@ module.exports = {
   Chat,
   Message,
   Review,
+  University
 };

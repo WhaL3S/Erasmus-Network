@@ -62,7 +62,7 @@ const University = () => {
     };
 
     const handleSave = (updatedUniversity) => {
-        axios.put(`http://localhost:3001/api/universities/${updatedUniversity.id}`, updatedUniversity)
+        axios.put(`http://localhost:3001/api/universities/${updatedUniversity.id_University}`, updatedUniversity)
             .then(response => {
                 setUniversity(response.data);
                 closeEditDialog();

@@ -39,9 +39,9 @@ const ViewAsList = () => {
             <div className='m-10 bg-white h-3/4 w-11/12 flex flex-col rounded-3xl justify-around items-center'>
                 <div style={listStyle}>
                     {universities.map((university) => (
-                        <div key={university.id} style={universityStyle}>
+                        <div key={university.id_University} style={universityStyle}>
                             <h2 className='text-2xl font-bold mb-2'>
-                                <Link to={`/universities/${university.id}`}>{university.name}</Link>
+                                <Link to={`/universities/${university.id_University}`}>{university.name}</Link>
                             </h2>
                             <p><strong>Location:</strong> {university.city}, {university.country}</p>
                             <p><strong>Rating:</strong> {university.rating}</p>

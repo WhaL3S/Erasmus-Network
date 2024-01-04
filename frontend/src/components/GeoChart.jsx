@@ -108,7 +108,7 @@ class GeoChart extends Component {
             const data = await response.json();
             return {
                 ...data, // latitude and longitude
-                id: university.id,
+                id: university.id_University,
                 name: university.name,
                 city,
                 country

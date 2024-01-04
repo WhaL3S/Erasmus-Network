@@ -188,9 +188,10 @@ INSERT INTO Client (name) VALUES
 ('Alice Johnson');
 
 INSERT INTO University (name, country, city, address, rating) VALUES 
-('Global Tech University', 'USA', 'New York', '123 Tech Lane', 4.5), 
-('Historic Arts College', 'UK', 'London', '456 Old Street', 4.7),
-('Future Science Institute', 'Germany', 'Berlin', '789 Innovation Blvd', 4.8);
+('Harvard University', 'USA', 'Cambridge', '123 Tech Street', 4.5),
+('KTU', 'Lithuania', 'Kaunas', '456 Old Road', 4.2),
+('University of Waterloo', 'Canada', 'Waterloo', '789 New Way', 4.7),
+('VU', 'Lithuania', 'Vilnius', 'New road 654', 2.4);
 
 INSERT INTO User (name, surname, email, login, password) VALUES 
 ('Emily', 'Brown', 'emily.brown@email.com', 'emilyb', 'pass123'), 

@@ -2,6 +2,7 @@ const express = require('express');
 const { fetchCoordinatesFromGoogle } = require('../services/googlePlaces');
 const reviewRoutes = require('./reviewRoutes');
 const router = express.Router();
+const universityController = require('../controllers/universityController');
 
 const universities = [
     { id: 1, name: 'Harvard University', country: 'USA', city: 'Cambridge', address: '123 Tech Street', rating: 4.5 },
@@ -57,46 +58,10 @@ router.get('/logs/:universityId', (req, res) => {
     res.json(filteredLogs);
 });
 
-router.get('/universities', async (req, res) => {
-    res.json(universities);
-});
-
-router.get('/universities/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
-    const university = universities.find(u => u.id === id);
-
-    if (!university) {
-        return res.status(404).send('University not found');
-    }
-
-    res.json(university);
-});
-
-router.put('/universities/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
-    const updatedData = req.body;
-    
-    const universityIndex = universities.findIndex(u => u.id === id);
-    if (universityIndex === -1) {
-        return res.status(404).send('University not found');
-    }
-
-    // Determine the changes
-    const changes = Object.entries(updatedData).reduce((acc, [key, value]) => {
-        if (universities[universityIndex][key] !== value) {
-            acc[key] = value;
-        }
-        return acc;
-    }, {});
-
-    // Log and update only if there are changes
-    if (Object.keys(changes).length > 0) {
-        universities[universityIndex] = { ...universities[universityIndex], ...changes };
-        logAction(id, 'Edit', changes);
-    }
-
-    res.json(universities[universityIndex]);
-});
+router.get('/universities', universityController.getUniversities);
+router.get('/universities/:id', universityController.getUniversityById);
+router.put('/universities/:id', universityController.updateUniversity);
+router.delete('/universities/:id', universityController.deleteUniversity);
 
 router.delete('/universities/:id', async (req, res) => {
     const id = parseInt(req.params.id);
