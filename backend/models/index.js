@@ -6,6 +6,7 @@ const Message = require('./messageModel');
 const Student = require('./studentModel'); // Make sure you have this model
 const University = require('./universityModel');
 const Review = require('./reviewModel');  // Import the Review model
+const LogUniversity =  require('./logUniversityModel');
 // Define associations
 User.hasMany(Message, { foreignKey: 'sender', as: 'sentMessages' });
 Message.belongsTo(User, { as: 'senderDetails', foreignKey: 'sender' });
@@ -18,6 +19,13 @@ Chat.belongsTo(User, { as: 'user2Details', foreignKey: 'user2' });
 Chat.hasMany(Message, { as: 'messages', foreignKey: 'chatId' });
 Message.belongsTo(Chat, { as: 'messageDetails', foreignKey: 'chatId' });
 
+University.hasMany(LogUniversity, {
+  foreignKey: 'universityId',
+  onDelete: 'CASCADE'
+});
+LogUniversity.belongsTo(University, {
+  foreignKey: 'universityId'
+});
 
 module.exports = {
   User,
@@ -25,5 +33,6 @@ module.exports = {
   Message,
   Review,
   University,
-  Student
+  Student,
+  LogUniversity
 };

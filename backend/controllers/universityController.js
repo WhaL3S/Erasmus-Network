@@ -67,6 +67,7 @@ exports.deleteUniversity = async (req, res) => {
         }
         res.status(204).send();
     } catch (error) {
+        console.log(`Error: ${error}`);
         res.status(500).send('Error deleting university');
     }
 };

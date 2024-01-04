@@ -189,7 +189,7 @@ CREATE TABLE LogUniversity (
     details TEXT NOT NULL,
     timestamp DATETIME NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(universityId) REFERENCES University(id_University)
+    FOREIGN KEY(universityId) REFERENCES University(id_University) ON DELETE CASCADE
 );
 
 -- INITIAL DATA FOR TESTING
