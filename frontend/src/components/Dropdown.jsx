@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Dropdown = ({ children, title, defaultLink }) => {
   return (
-    <div className="relative group">
+    <div className="relative group" style={{ zIndex: 1000 }}>
       <Link to={defaultLink} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         {title}
         <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">

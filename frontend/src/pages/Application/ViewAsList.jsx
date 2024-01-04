@@ -1,30 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
+import axios from 'axios';
 
 const ViewAsList = () => {
-    const filterUniversities = () => {
-        alert('Filter button clicked!');
-    }
+    const [universities, setUniversities] = useState([]);
 
-  return (
-    <div className='m-5'>
-        <button className='w-20 mb-5 p-4 text-base border border-gray-500 rounded-md bg-gray-100 hover:bg-gray-200' onClick={filterUniversities}>Filter</button>
+    useEffect(() => {
+        const fetchUniversities = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/universities');
+                setUniversities(response.data);
+            } catch (error) {
+                console.error('Error fetching universities', error);
+            }
+        };
 
-        <div className='border border-solid border-gray-300 p-3 mb-3'>
-            <h2 className='text-2xl font-bold mb-2'><Link to='/universities/university'>University 1</Link></h2>
-            <p><strong>Location:</strong> City A</p>
-            <p><strong>Rating:</strong> 4.5</p>
-            <p><strong>Faculty Names:</strong> Engineering, Science</p>
+        fetchUniversities();
+    }, []);
+
+    return (
+        <div className='bg-gray-200 h-screen'>
+            <Navbar />
+            <div className='m-10 bg-white h-3/4 w-11/12 flex flex-col rounded-3xl justify-around items-center'>
+                {universities.map((university) => (
+                    <div key={university.id} className='p-3 mb-3 w-full'>
+                        <h2 className='text-2xl font-bold mb-2'>
+                            <Link to={`/universities/${university.id}`}>{university.name}</Link>
+                        </h2>
+                        <p><strong>Location:</strong> {university.location}</p>
+                        <p><strong>Rating:</strong> {university.rating}</p>
+                        <div className='mt-2'>
+                            <Link className='text-xl text-blue-600 hover:text-blue-800' to={`/universities/${university.id}/reviews`}>View Reviews</Link>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
-
-        <div className='border border-solid border-gray-300 p-3 mb-3'>
-            <h2 className='text-2xl font-bold mb-2'><Link to='/universities/university'>University 2</Link></h2>
-            <p><strong>Location:</strong> City B</p>
-            <p><strong>Rating:</strong> 4.0</p>
-            <p><strong>Faculty Names:</strong> Arts, Business</p>
-        </div>
-    </div>
-  )
+    );    
 }
 
 export default ViewAsList
