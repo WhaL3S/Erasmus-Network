@@ -1,4 +1,3 @@
-User
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
