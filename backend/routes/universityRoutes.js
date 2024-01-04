@@ -1,6 +1,6 @@
 const express = require('express');
 const { fetchCoordinatesFromGoogle } = require('../services/googlePlaces');
-
+const reviewRoutes = require('./reviewRoutes');
 const router = express.Router();
 
 const universities = [
@@ -8,6 +8,9 @@ const universities = [
     { id: 2, name: 'Historic College', country: 'UK', city: 'Historytown', address: '456 Old Road', rating: 4.2 },
     { id: 3, name: 'Future University', country: 'Canada', city: 'Innovate City', address: '789 New Way', rating: 4.7 },
 ];
+
+// uni reviews - Tomas
+router.use('/universities/:universityId/reviews', reviewRoutes);
 
 // Routes
 router.get('/coordinates', async (req, res) => {
