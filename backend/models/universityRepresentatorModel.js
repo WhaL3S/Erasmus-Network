@@ -1,36 +1,41 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
+const User = require('./userModel');
 
-const User = sequelize.define('User', {
-  username: {
+const Representator = sequelize.define('Representator', {
+  position: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  usersurname: {
+  department: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
+  linkedin: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-  },
-  login: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
   },
   id_user: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+    references: {
+        model: User,
+        key: 'id_user',
+      },
+  },
+  id_university: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    references: {
+        model: University,
+        key: 'id_university',
+      },
   },
 },{
     timestamps: false
 });
 
-module.exports = User;
+module.exports = Representator;
