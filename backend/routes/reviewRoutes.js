@@ -1,9 +1,7 @@
 const express = require('express');
-const multer = require('multer');
-const upload = multer();
-
 const reviewController = require('../controllers/reviewController');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true }); // to access params from the parent router
 router.get('/', reviewController.getReviewsForUniversity);
+
 module.exports = router;

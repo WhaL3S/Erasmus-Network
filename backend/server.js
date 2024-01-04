@@ -7,11 +7,7 @@ const app = express();
 
 sequelize.sync();
 
-app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: 'GET,PUT,POST,DELETE',
-    credentials: true,
-  }));
+app.use(cors());
 app.use(express.json());
 
 // Import routes
@@ -22,6 +18,7 @@ const reviewRoutes = require('./routes/reviewRoutes');
 // Routes
 app.use('/api', messageRoutes);
 app.use('/api', universityRoutes);
+//app.use('/api', reviewRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

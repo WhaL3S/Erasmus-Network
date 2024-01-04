@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const Reviews = ({ universityId }) => {
+const Reviews = () => {
     const [reviews, setReviews] = useState([]);
+    const { universityId } = useParams(); // This hook allows you to access the route parameters
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/universities/reviews`)
+        axios.get(`http://localhost:3001/api/universities/${universityId}/reviews`)
             .then(response => setReviews(response.data))
             .catch(error => console.error('Error fetching data: ', error));
     }, [universityId]);
