@@ -53,11 +53,6 @@ const Representator = sequelize.define('Representator', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  linkedin: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
   id_user: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -70,7 +65,6 @@ const Representator = sequelize.define('Representator', {
   id_university: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
     references: {
         model: University,
         key: 'id_university',

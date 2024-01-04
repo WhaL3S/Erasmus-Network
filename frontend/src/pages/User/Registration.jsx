@@ -3,8 +3,28 @@ import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
   const navigate = useNavigate();
-  const handleSubmit = () => {
-      navigate('/guest/registration/confirm-registration');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://localhost:5000/guest/registration', {
+      method: 'POST',
+      body: {
+        username: 'Jon',
+        usersurname: 'Doe',
+        email: 'email@email.com',
+        login: 'login',
+        password: 'password',
+        position: 'position',
+        department: 'department',
+        id_university: 1
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const result = await response.json();
+    console.log(result);
+    //navigate('/guest/registration/confirm-registration');
+      
   };
 
   const buttonStyle = 'mt-5 w-48 h-8 border border-black rounded-3xl bg-gray-200';
@@ -14,9 +34,9 @@ const Registration = () => {
           <div className='mx-10 mb-10 bg-white h-5/6 w-11/12 flex flex-col space-y-5 rounded-3xl' >
               <h1 className='flex p-16 text-6xl justify-center text-center'>Welcome to Erasmus System!</h1>
               <div className='pb-12 flex justify-center flex-col text-center'>
-                  <form className='flex flex-col text-center items-center' action="#">
+                  <form className='flex flex-col text-center items-center' onSubmit={handleSubmit}>
                     <label htmlFor="name">Name</label>
-                    <input className='m-2 h-8 border border-black w-48 rounded-md' type="text" id="name"/>
+                    <input className='m-2 h-8 border border-black w-48 rounded-md' type="text" id="name" />
 
                     <label className='mt-2' htmlFor="surname">Surname</label>
                     <input className='m-2 h-8 border border-black w-48 rounded-md' type="text" id="surname"/>
@@ -58,8 +78,7 @@ const Registration = () => {
                       <label className='mt-2' htmlFor="department">Department</label>
                       <input className='m-2 h-8 border border-black w-48 rounded-md' type="text" id="department"/>
                     </div>
-                    
-                    <button className={buttonStyle} onClick={handleSubmit}>Submit</button>
+                    <button className={buttonStyle} type="submit">Submit</button>
                   </form>
               </div>
           </div>
