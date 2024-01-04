@@ -1,17 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
+import axios from 'axios';
 
 import GeoChart from '../../components/GeoChart';
 
 const ViewOnMap = () => {
-    const universities = [
-        { id: 1, name: 'University 1', country: 'USA', city: 'Washington' },
-        { id: 2, name: 'KTU', country: 'Lithuania', city: 'Kaunas' },
-        { id: 3, name: 'VU', country: 'Lithuania', city: 'Vilnius' },
-        { id: 4, name: 'University 4', country: 'Germany', city: 'Berlin' },
-        // ... other universities
-    ];
+    const [universities, setUniversities] = useState([]);
+
+    useEffect(() => {
+        const fetchUniversities = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/universities');
+                setUniversities(response.data);
+            } catch (error) {
+                console.error('Error fetching universities', error);
+            }
+        };
+
+        fetchUniversities();
+    }, []);
 
     return (
         <div className='bg-gray-200 h-screen'>
@@ -20,7 +27,7 @@ const ViewOnMap = () => {
                 <GeoChart universities={universities} />
             </div>
         </div>
-    )
+    );
 }
 
 export default ViewOnMap
