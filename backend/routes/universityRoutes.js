@@ -10,6 +10,14 @@ const universities = [
     { id: 4, name: 'VU', country: 'Lithuania', city: 'Vilnius', address: 'New road 654', rating: 2.4 },
 ];
 
+const actionLogs = [];
+
+function logAction(universityId, action, details) {
+    const timestamp = new Date().toISOString();
+    actionLogs.push({ universityId, timestamp, action, details });
+    console.log(`Action Logged: ${timestamp} - ${action}`, details);
+}
+
 // uni reviews - Tomas
 router.use('/universities/:universityId/reviews', reviewRoutes);
 
@@ -27,6 +35,12 @@ router.get('/coordinates', async (req, res) => {
     } catch (error) {
         res.status(500).send('Error fetching coordinates');
     }
+});
+
+router.get('/logs/:universityId', (req, res) => {
+    const universityId = parseInt(req.params.universityId);
+    const filteredLogs = actionLogs.filter(log => log.universityId === universityId);
+    res.json(filteredLogs);
 });
 
 router.get('/universities', async (req, res) => {
@@ -54,6 +68,7 @@ router.put('/universities/:id', async (req, res) => {
     }
 
     universities[universityIndex] = { ...universities[universityIndex], ...updatedData };
+    logAction(id, 'Edit', { updatedData });
     res.json(universities[universityIndex]);
 });
 

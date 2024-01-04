@@ -12,7 +12,6 @@ const ViewOnMap = () => {
             try {
                 const response = await axios.get('http://localhost:3001/api/universities');
                 setUniversities(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error('Error fetching universities', error);
             }

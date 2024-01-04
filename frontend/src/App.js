@@ -15,7 +15,6 @@ import ViewAsList from './pages/Application/ViewAsList';
 import ViewOnMap from './pages/Application/ViewOnMap';
 import Reviews from './pages/Review/Reviews';
 import University from './pages/University/University';
-import ActionLog from './pages/University/ActionLog';
 
 function App() {
   return (
@@ -24,7 +23,6 @@ function App() {
           <Route path="/universities" element={<ViewAsList />} />
           <Route path="/universities-map" element={<ViewOnMap />} />
           <Route path="/universities/:universityId" element={<University />} />
-          <Route path="/universities/university/action-log" element={<ActionLog />} />
 
           <Route path="/messenger" element={<Messenger />} />
 

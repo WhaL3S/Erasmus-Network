@@ -4,8 +4,8 @@ import axios from 'axios';
 import Navbar from '../../components/Navbar';
 
 import EditDialog from './EditDialog';
-import UploadDialog from './UploadDialog';
 import DeleteDialog from './DeleteDialog';
+import ActionLogDialog from './ActionLogDialog';
 
 import './DialogStyles.css';
 
@@ -29,22 +29,49 @@ const University = () => {
 
     /* DIALOG LOGIC */
     const [isEditDialogOpen, setEditDialogOpen] = useState(false);
-    const [isUploadDialogOpen, setUploadDialogOpen] = useState(false);
-    const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    
     const openEditDialog = () => setEditDialogOpen(true);
     const closeEditDialog = () => setEditDialogOpen(false);
-    
-    const openUploadDialog = () => setUploadDialogOpen(true);
-    const closeUploadDialog = () => setUploadDialogOpen(false);
-    
+
+    const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const openDeleteDialog = () => setDeleteDialogOpen(true);
     const closeDeleteDialog = () => setDeleteDialogOpen(false);
-    
-    const handleDelete = () => {
-        // Perform delete operation here
-        navigate('/universities');
+
+    const [isActionLogDialogOpen, setActionLogDialogOpen] = useState(false);
+    const [actionLogs, setActionLogs] = useState([]);
+    const openActionLogDialog = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/logs/${universityId}`);
+            setActionLogs(response.data);
+            setActionLogDialogOpen(true);
+        } catch (error) {
+            console.error('Error fetching action logs', error);
+        }
     };
+    const closeActionLogDialog = () => setActionLogDialogOpen(false);
+
+    const handleDelete = () => {
+        axios.delete(`http://localhost:3001/api/universities/${universityId}`)
+            .then(response => {
+                // Handle the successful deletion
+                navigate('/universities');
+            })
+            .catch(error => {
+                // Handle any errors here
+                console.error('Error deleting university', error);
+            });
+    };
+
+    const handleSave = (updatedUniversity) => {
+        axios.put(`http://localhost:3001/api/universities/${updatedUniversity.id}`, updatedUniversity)
+            .then(response => {
+                setUniversity(response.data);
+                closeEditDialog();
+            })
+            .catch(error => {
+                console.error('Error updating university', error);
+            });
+    };
+
     /* DIALOG LOGIC */
 
     if (!university) {
@@ -74,22 +101,29 @@ const University = () => {
                 {/* Links and Dialogs */}
                 <Link className='text-2xl text-center' to='/apply'>Apply</Link>
                 <Link className='text-2xl text-center' to={`/universities/${universityId}/reviews`}>Reviews</Link>
-                <Link className='text-2xl text-center border-2 p-2' to={`/universities/${universityId}/action-log`}>Action Log</Link>
 
                 {/* DIALOGS */}
-                <button onClick={openEditDialog}>Edit Page</button>
-                <button onClick={openUploadDialog}>Upload Files</button>
-                <button onClick={openDeleteDialog}>Delete Page</button>
+                <button onClick={openActionLogDialog}>View Action Log</button>
+                {isActionLogDialogOpen && (
+                    <ActionLogDialog
+                        logs={actionLogs}
+                        onClose={closeActionLogDialog}
+                    />
+                )}
 
-                {/* Render dialogs conditionally */}
+
+                <button onClick={openEditDialog}>Edit Page</button>
                 {isEditDialogOpen && (
-                <EditDialog onClose={closeEditDialog} />
+                    <EditDialog
+                        university={university}
+                        onClose={closeEditDialog}
+                        onSave={handleSave}
+                    />
                 )}
-                {isUploadDialogOpen && (
-                <UploadDialog onClose={closeUploadDialog} />
-                )}
+
+                <button onClick={openDeleteDialog}>Delete Page</button>
                 {isDeleteDialogOpen && (
-                <DeleteDialog onClose={closeDeleteDialog} onDelete={handleDelete} />
+                    <DeleteDialog universityId={universityId} onClose={closeDeleteDialog} onDelete={handleDelete} />
                 )}
                 {/* DIALOGS */}
             </div>
