@@ -2,9 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const upload = multer();
 
-const messageController = require('../controllers/reviewController');
+const reviewController = require('../controllers/reviewController');
 
 const router = express.Router();
-router.get('/', reviewController.getReviews);
-
+router.get('/', reviewController.getReviewsForUniversity);
 module.exports = router;

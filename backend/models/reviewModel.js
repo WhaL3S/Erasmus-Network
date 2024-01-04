@@ -1,33 +1,35 @@
-// models/review.js
 module.exports = (sequelize, DataTypes) => {
     const Review = sequelize.define('Review', {
         text: DataTypes.STRING,
         timeCreated: DataTypes.DATE,
         rating: DataTypes.INTEGER,
-        id_review: {
+        idReview: {
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true,
+            field: 'id_Review'
         },
-        fk_Studentid_User: {
+        fkStudentidUser: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            field: 'fk_Studentid_User'
         },
-        fk_Universityid_University: {
+        fkUniversityidUniversity: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            field: 'fk_Universityid_University'
         }
     }, {
-        tableName: 'review'
+        tableName: 'Review'
     });
 
     Review.associate = function(models) {
         Review.belongsTo(models.Student, {
-            foreignKey: 'fk_Studentid_User',
+            foreignKey: 'fkStudentidUser',
             as: 'student'
         });
-
         Review.belongsTo(models.University, {
-            foreignKey: 'fk_Universityid_University',
+            foreignKey: 'fkUniversityidUniversity',
             as: 'university'
         });
     };

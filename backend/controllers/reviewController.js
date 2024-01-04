@@ -1,8 +1,12 @@
-const { Review } = require('../models'); // Adjust the path as per your project structure
+const { Review } = require('../models');
 
-const getReviews = async (req, res) => {
+const getReviewsForUniversity = async (req, res) => {
     try {
-        const reviews = await Review.findAll();
+        const universityId = req.params.universityId;
+        const reviews = await Review.findAll({
+            where: { fk_Universityid_University: universityId },
+            include: ['student', 'university']
+        });
         res.status(200).json(reviews);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -10,5 +14,5 @@ const getReviews = async (req, res) => {
 };
 
 module.exports = {
-    getReviews
+    getReviewsForUniversity
 };

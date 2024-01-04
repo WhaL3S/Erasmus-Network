@@ -1,8 +1,9 @@
 const express = require('express');
 const { fetchCoordinatesFromGoogle } = require('../services/googlePlaces');
-
+const reviewRoutes = require('./reviewRoutes');
 const router = express.Router();
-
+// uni reviews - Tomas
+router.use('/universities/:universityId/reviews', reviewRoutes);
 // Routes
 router.get('/coordinates', async (req, res) => {
     const { city, country } = req.query;

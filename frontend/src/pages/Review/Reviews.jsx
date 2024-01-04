@@ -3,18 +3,14 @@ import Navbar from '../../components/Navbar';
 import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
 import axios from 'axios';
 
-const Reviews = () => {
+const Reviews = ({ universityId }) => {
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        axios.get('/universities/reviews') // Make sure this URL matches your backend route
-            .then(response => {
-                setReviews(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data: ', error);
-            })
-    }, []);
+        axios.get(`http://localhost:3000/api/universities/reviews`)
+            .then(response => setReviews(response.data))
+            .catch(error => console.error('Error fetching data: ', error));
+    }, [universityId]);
 
     const renderStars = (rating) => {
         let stars = [];
