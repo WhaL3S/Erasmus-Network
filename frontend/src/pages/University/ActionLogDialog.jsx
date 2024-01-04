@@ -1,8 +1,6 @@
 import React from 'react';
 
 const ActionLogDialog = ({ logs, onClose }) => {
-    const reversedLogs = [...logs].reverse();
-
     const logListStyle = {
         maxHeight: '400px',
         overflowY: 'auto',
@@ -28,9 +26,9 @@ const ActionLogDialog = ({ logs, onClose }) => {
         <div className='dialog-background'>
             <div className='dialog'>
                 <h2>Action Logs</h2>
-                {reversedLogs.length > 0 ? (
+                {logs.length > 0 ? (
                     <ul style={logListStyle}>
-                        {reversedLogs.map((log, index) => (
+                        {logs.map((log, index) => (
                             <li key={index} style={logItemStyle}>
                                 <strong>Time:</strong> {log.timestamp}<br />
                                 <strong>Action:</strong> {log.action}<br />

@@ -1,4 +1,5 @@
 const University = require('../models/universityModel');
+const { logAction } = require('../services/universityServices');
 
 exports.getUniversities = async (req, res) => {
     try {
@@ -33,10 +34,25 @@ exports.updateUniversity = async (req, res) => {
             return res.status(404).send('University not found');
         }
 
-        // Update the university
-        await university.update(updatedData);
+        // Determine the changes
+        const changes = Object.entries(updatedData).reduce((acc, [key, value]) => {
+            if (university[key] !== value) {
+                acc[key] = value;
+            }
+            return acc;
+        }, {});
+
+        // Log and update only if there are changes
+        if (Object.keys(changes).length > 0) {
+            logAction(id, 'Edit', changes);
+
+            // Update the university
+            await university.update(changes);
+        }
+
         res.json(university);
     } catch (error) {
+        console.log(`Error: ${error}`);
         res.status(500).send('Error updating university');
     }
 };
