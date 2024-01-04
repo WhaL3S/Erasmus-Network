@@ -5,7 +5,7 @@ USE erasmus;
 DROP TABLE IF EXISTS Evaluation;
 DROP TABLE IF EXISTS Message;
 DROP TABLE IF EXISTS Application;
-DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS Review;
 DROP TABLE IF EXISTS Resume;
 DROP TABLE IF EXISTS Chat;
 DROP TABLE IF EXISTS University_Representative;
@@ -179,3 +179,58 @@ CREATE TABLE Evaluation (
     CONSTRAINT provides_Evaluation FOREIGN KEY(fk_University_representativeid_User) REFERENCES University_Representative(id_User),
     CONSTRAINT evaluates_Evaluation FOREIGN KEY(fk_Applicationid_Application) REFERENCES Application(id_Application)
 );
+
+-- INITIAL DATA FOR TESTING
+INSERT INTO Client (name) VALUES 
+('John Doe'), 
+('Jane Smith'),
+('Alice Johnson');
+
+INSERT INTO University (name, country, city, address, rating) VALUES 
+('Global Tech University', 'USA', 'New York', '123 Tech Lane', 4.5), 
+('Historic Arts College', 'UK', 'London', '456 Old Street', 4.7),
+('Future Science Institute', 'Germany', 'Berlin', '789 Innovation Blvd', 4.8);
+
+INSERT INTO User (name, surname, email, login, password) VALUES 
+('Emily', 'Brown', 'emily.brown@email.com', 'emilyb', 'pass123'), 
+('David', 'Wilson', 'david.wilson@email.com', 'davidw', 'pass456'),
+('Sophia', 'Martinez', 'sophia.martinez@email.com', 'sophiam', 'pass789'),
+('Michael', 'Roberts', 'michael.roberts@univmail.com', 'mroberts', 'pass1234'),
+('Sarah', 'Johnson', 'sarah.johnson@univmail.com', 'sjohnson', 'pass5678');
+
+INSERT INTO Student (passport_id, phone_number, linkedin_profile, id_User) VALUES 
+('AB123456', '123-456-7890', 'linkedin.com/in/emilybrown', 1),
+('CD789012', '234-567-8901', 'linkedin.com/in/davidwilson', 2),
+('EF345678', '345-678-9012', 'linkedin.com/in/sophiamartinez', 3);
+
+INSERT INTO Course (name, semester, credits, description, module_code, degree, study_format, faculty, fk_Universityid_University) VALUES 
+('Introduction to Computer Science', 'Fall 2024', 4, 'Basic concepts of computing', 'CS101', 'BSc', 'Full-time', 'Computer Science', 1),
+('Modern Art History', 'Spring 2024', 3, 'Study of modern art movements', 'ART102', 'BA', 'Part-time', 'Arts', 2);
+
+INSERT INTO University_Representative (position, department, id_User, fk_Universityid_University) VALUES 
+('Admissions Officer', 'Admissions', 4, 1),
+('Department Head', 'Computer Science', 5, 1);
+
+INSERT INTO Chat (name, fk_Studentid_User, fk_Universityid_University) VALUES 
+('Erasmus Chat 1', 1, 1),
+('Erasmus Chat 2', 2, 1);
+
+INSERT INTO Resume (url, title, file_type, dateTime, size, fk_Studentid_User) VALUES 
+('http://example.com/resumes/emily.pdf', 'Emily Brown Resume', 'PDF', '2024-01-10 09:00:00', 500.0, 1),
+('http://example.com/resumes/david.pdf', 'David Wilson Resume', 'PDF', '2024-01-11 10:00:00', 450.0, 2);
+
+INSERT INTO Review (text, timeCreated, rating, fk_Studentid_User, fk_Universityid_University) VALUES 
+('Great experience and learning environment.', '2024-01-15', 5, 1, 1),
+('Excellent faculty and resources.', '2024-01-20', 4, 2, 1);
+
+INSERT INTO Application (motivation_letter, status, dateTime, fk_Studentid_User, fk_Resumeid_Resume, fk_Courseid_Course) VALUES 
+('I am passionate about computer science.', 'Submitted', '2024-01-22 12:00:00', 1, 1, 1),
+('I am eager to learn and contribute.', 'Under Review', '2024-01-23 13:00:00', 2, 2, 1);
+
+INSERT INTO Message (text, timeSent, attachment, fk_Chatid_Chat, fk_Studentid_User) VALUES 
+('Hello, I have a question about the course.', '2024-01-25', NULL, 1, 1),
+('Can you tell me more about the faculty?', '2024-01-26', NULL, 2, 2);
+
+INSERT INTO Evaluation (reason, dateTime, fk_University_representativeid_User, fk_Applicationid_Application) VALUES 
+('Outstanding academic record', '2024-01-30 15:00:00', 4, 1),
+('Strong motivation and skills', '2024-01-31 16:00:00', 4, 2);
