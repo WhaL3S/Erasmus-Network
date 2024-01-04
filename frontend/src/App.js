@@ -39,7 +39,7 @@ function App() {
           <Route path="/review" element={<Review />} />
           <Route path="/view-applications" element={<ViewApplications />} />
           
-          <Route path="/universities/reviews" element={<Reviews />} />
+          <Route path="/universities/:universityId/reviews" element={<Reviews />} />
 
           <Route path="/*" element={<Main />} />
         </Routes>
