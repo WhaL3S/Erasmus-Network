@@ -2,6 +2,7 @@
 CREATE DATABASE IF NOT EXISTS erasmus;
 USE erasmus;
 
+DROP TABLE IF EXISTS LogUniversity;
 DROP TABLE IF EXISTS Evaluation;
 DROP TABLE IF EXISTS Message;
 DROP TABLE IF EXISTS Application;
@@ -179,6 +180,16 @@ CREATE TABLE Evaluation (
     UNIQUE(fk_Applicationid_Application),
     CONSTRAINT provides_Evaluation FOREIGN KEY(fk_University_representativeid_User) REFERENCES University_Representative(id_User),
     CONSTRAINT evaluates_Evaluation FOREIGN KEY(fk_Applicationid_Application) REFERENCES Application(id_Application)
+);
+
+CREATE TABLE LogUniversity (
+    id INT AUTO_INCREMENT,
+    universityId INT NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    details TEXT NOT NULL,
+    timestamp DATETIME NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(universityId) REFERENCES University(id_University)
 );
 
 -- INITIAL DATA FOR TESTING
