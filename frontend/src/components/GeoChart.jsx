@@ -99,6 +99,7 @@ class GeoChart extends Component {
     }
 
     fetchCoordinates = async (university) => {
+        console.log(university.name);
         try {
             const { city, country } = university;
             const response = await fetch(`http://localhost:3001/api/coordinates?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country)}`);

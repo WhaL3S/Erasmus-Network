@@ -4,9 +4,10 @@ const reviewRoutes = require('./reviewRoutes');
 const router = express.Router();
 
 const universities = [
-    { id: 1, name: 'Tech University', country: 'USA', city: 'Techville', address: '123 Tech Street', rating: 4.5 },
-    { id: 2, name: 'Historic College', country: 'UK', city: 'Historytown', address: '456 Old Road', rating: 4.2 },
-    { id: 3, name: 'Future University', country: 'Canada', city: 'Innovate City', address: '789 New Way', rating: 4.7 },
+    { id: 1, name: 'Harvard University', country: 'USA', city: 'Cambridge', address: '123 Tech Street', rating: 4.5 },
+    { id: 2, name: 'KTU', country: 'Lithuania', city: 'Kaunas', address: '456 Old Road', rating: 4.2 },
+    { id: 3, name: 'University of Waterloo', country: 'Canada', city: 'Waterloo', address: '789 New Way', rating: 4.7 },
+    { id: 4, name: 'VU', country: 'Lithuania', city: 'Vilnius', address: 'New road 654', rating: 2.4 },
 ];
 
 // uni reviews - Tomas

@@ -23,7 +23,7 @@ function App() {
         <Routes>
           <Route path="/universities" element={<ViewAsList />} />
           <Route path="/universities-map" element={<ViewOnMap />} />
-          <Route path="/universities/university" element={<University />} />
+          <Route path="/universities/:universityId" element={<University />} />
           <Route path="/universities/university/action-log" element={<ActionLog />} />
 
           <Route path="/messenger" element={<Messenger />} />

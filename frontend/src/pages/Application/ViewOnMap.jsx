@@ -12,6 +12,7 @@ const ViewOnMap = () => {
             try {
                 const response = await axios.get('http://localhost:3001/api/universities');
                 setUniversities(response.data);
+                console.log(response.data);
             } catch (error) {
                 console.error('Error fetching universities', error);
             }
@@ -24,7 +25,9 @@ const ViewOnMap = () => {
         <div className='bg-gray-200 h-screen'>
             <Navbar />
             <div className='m-10 bg-white h-3/4 w-11/12 flex flex-col rounded-3xl justify-around items-center'>
-                <GeoChart universities={universities} />
+                {universities.length > 0 ? 
+                    <GeoChart universities={universities} /> :
+                    <div>Loading Map...</div>}
             </div>
         </div>
     );
