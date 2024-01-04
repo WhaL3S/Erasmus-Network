@@ -18,11 +18,15 @@ app.use(express.json());
 const messageRoutes = require('./routes/messageRoutes');
 const universityRoutes = require('./routes/universityRoutes');
 const registrationRoutes = require('./routes/registrationRoutes');
+const loginRoutes = require('./routes/loginRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 // Routes
 app.use('/api', messageRoutes);
 app.use('/api', universityRoutes);
 app.use('/api', registrationRoutes);
+app.use('/api', loginRoutes);
+app.use('/api', profileRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
