@@ -14,7 +14,6 @@ const Navbar = () => {
             </Dropdown>
             <NavItem to="/messenger">Messages</NavItem>
             <NavItem to="/review">Review student applications</NavItem>
-
         </div>
     );
 }
