@@ -159,7 +159,8 @@ CREATE TABLE Application (
 CREATE TABLE Message (
     text VARCHAR(255),
     timeSent DATE,
-    attachment VARCHAR(255),
+    attachment BLOB,
+    attachmentName VARCHAR(255),
     id_Message INT AUTO_INCREMENT,
     fk_Chatid_Chat INT NOT NULL,
     fk_Studentid_User INT NOT NULL,

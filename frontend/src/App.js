@@ -7,7 +7,6 @@ import Guest from './pages/User/Guest';
 import Login from './pages/User/Login';
 import Registration from './pages/User/Registration';
 import ConfirmRegistration from './pages/User/ConfirmRegistration'
-import Attachment from './pages/Messaging/Attachment';
 import Apply from './pages/Application/Apply';
 import Edit from './pages/Application/Edit';
 import Review from './pages/Application/Review';
@@ -17,7 +16,6 @@ import ViewOnMap from './pages/Application/ViewOnMap';
 import Reviews from './pages/Review/Reviews';
 import University from './pages/University/University';
 import ActionLog from './pages/University/ActionLog';
-
 
 function App() {
   return (
@@ -29,7 +27,6 @@ function App() {
           <Route path="/universities/university/action-log" element={<ActionLog />} />
 
           <Route path="/messenger" element={<Messenger />} />
-          <Route path="/messenger/attachment" element={<Attachment />}/>
 
           <Route path="/profile" element={<Profile />} />
           <Route path="/guest" element={<Guest />}/>

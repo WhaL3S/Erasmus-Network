@@ -17,7 +17,11 @@ const Message = sequelize.define('Message', {
     allowNull: false,
   },
   attachment: {
-    type: DataTypes.STRING, 
+    type: DataTypes.BLOB,
+    allowNull: true,
+  },
+  attachmentName: {
+    type: DataTypes.STRING,
     allowNull: true,
   },
   chatId: {

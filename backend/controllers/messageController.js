@@ -53,8 +53,11 @@ const getMessagesByChatId = async (req, res) => {
   }
 };
 
+
 const sendMessage = async (req, res) => {
-  const { text, attachment } = req.body;
+  const text = req.body.text;
+  const attachmentName = req.body.attachmentName;
+  const attachment = req.file;
   const chatId = parseInt(req.params.chatId, 10);
   const senderId = 1;
 
@@ -63,7 +66,16 @@ const sendMessage = async (req, res) => {
   }
 
   try {
-    const newMessage = await Message.create({ text, attachment, chatId, sender: senderId });
+    const base64Attachment = attachment.buffer.toString('base64');
+
+    const newMessage = await Message.create({
+      text,
+      attachment: base64Attachment,
+      attachmentName,
+      chatId,
+      sender: senderId,
+    });
+
     res.json(newMessage);
   } catch (error) {
     console.error(error);
