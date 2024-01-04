@@ -1,36 +1,32 @@
-module.exports = (sequelize, DataTypes) => {
-    const Student = sequelize.define('Student', {
-        passportId: {
-            type: DataTypes.STRING,
-            field: 'passport_id'
-        },
-        phoneNumber: {
-            type: DataTypes.STRING,
-            field: 'phone_number'
-        },
-        linkedinProfile: {
-            type: DataTypes.STRING,
-            field: 'linkedin_profile'
-        },
-        idUser: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            field: 'id_User'
-        }
-    }, {
-        tableName: 'Student',
-        timestamps: false // assuming your table doesn't have timestamps like createdAt or updatedAt
-    });
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/sequelize');
 
-    Student.associate = function(models) {
-        // Assuming you have a User model and it's related to Student
-        Student.belongsTo(models.User, {
-            foreignKey: 'idUser',
-            as: 'user'
-        });
+const Student = sequelize.define('Student', {
+    passportId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'passport_id'
+    },
+    phoneNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'phone_number'
+    },
+    linkedinProfile: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        field: 'linkedin_profile'
+    },
+    idUser: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        field: 'id_User'
+    }
+}, {
+    tableName: 'Student',
+    timestamps: false  // Assuming your table doesn't have timestamps
+});
 
-        // If there are other associations, define them here
-    };
-
-    return Student;
-};
+// Export the model
+module.exports = Student;

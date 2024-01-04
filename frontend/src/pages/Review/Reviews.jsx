@@ -1,36 +1,26 @@
-import React from 'react';
+User
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const Reviews = () => {
-    // Hardcoded sample reviews
-    const reviews = [
-        {
-            text: "Great environment and professors. Highly recommend!",
-            rating: 4.5,
-            student: { name: "Alex" },
-            university: { name: "Global Tech University" }
-        },
-        {
-            text: "Amazing experience, learned a lot.",
-            rating: 5,
-            student: { name: "Jordan" },
-            university: { name: "Historic Arts College" }
-        },
-        {
-            text: "Good course material, but found the environment competitive.",
-            rating: 3.5,
-            student: { name: "Taylor" },
-            university: { name: "Future Science Institute" }
-        }
-    ];
+    const [reviews, setReviews] = useState([]);
+    const { universityId } = useParams(); // This hook allows you to access the route parameters
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_API_URL}:3001/api/universities/${universityId}/reviews`)
+            .then(response => setReviews(response.data))
+            .catch(error => console.error('Error fetching data: ', error));
+    }, [universityId]);
 
     const renderStars = (rating) => {
         let stars = [];
         for (let i = 0; i < 5; i++) {
-            if (i < Math.floor(rating)) {
+            if (i < rating) {
                 stars.push(<IoStar key={i} />);
-            } else if (i === Math.floor(rating) && rating % 1 !== 0) {
+            } else if (i === Math.floor(rating) && !Number.isInteger(rating)) {
                 stars.push(<IoStarHalf key={i} />);
             } else {
                 stars.push(<IoStarOutline key={i} />);
@@ -55,6 +45,10 @@ const Reviews = () => {
                         <p className='text-3xl text-center'>
                             {review.text}
                         </p>
+
+                        <div className='w-3/4 flex justify-end'>
+                            <button className=''>Replies</button>
+                        </div>
                     </div>
                 ))}
             </div>
