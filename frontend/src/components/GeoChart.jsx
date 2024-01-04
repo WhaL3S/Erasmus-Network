@@ -75,7 +75,6 @@ class GeoChart extends Component {
         const hasUni = this.state.universityData.some(uni => 
             uni.country === feature.properties.name || uni.country === feature.properties.iso3
         );
-        console.log(`Property ${feature.properties.name}, Country ${hasUni}`);
         return {
             fillColor: hasUni ? this.getRandomColor() : '#FFFFFF', // Fill color is random if there's a uni, otherwise white
             weight: 1,
