@@ -1,4 +1,3 @@
-User
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
@@ -7,13 +6,26 @@ import { useParams } from 'react-router-dom';
 
 const Reviews = () => {
     const [reviews, setReviews] = useState([]);
-    const { universityId } = useParams(); // This hook allows you to access the route parameters
+    const [filter, setFilter] = useState({ rating: '', userId: '' });
+    const { universityId } = useParams();
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}:3001/api/universities/${universityId}/reviews`)
-            .then(response => setReviews(response.data))
-            .catch(error => console.error('Error fetching data: ', error));
-    }, [universityId]);
+        const fetchReviews = async () => {
+            const queryParameters = new URLSearchParams({
+                ...filter,
+                universityId: filter.rating || filter.userId ? undefined : universityId // If filtering, don't use universityId
+            });
+
+            try {
+                const response = await axios.get(`http://localhost:3001/api/universities/${universityId}/reviews/filtered?${queryParameters}`);
+                setReviews(response.data);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        };
+
+        fetchReviews();
+    }, [universityId, filter]);
 
     const renderStars = (rating) => {
         let stars = [];
@@ -27,11 +39,30 @@ const Reviews = () => {
             }
         }
         return stars;
-    }
+    };
+
+    const handleFilterChange = (e) => {
+        setFilter({ ...filter, [e.target.name]: e.target.value });
+    };
 
     return (
         <div className='bg-gray-200 h-screen'>
             <Navbar />
+            <div className='filter-form'>
+                <input 
+                    name="rating" 
+                    placeholder="Rating" 
+                    value={filter.rating} 
+                    onChange={handleFilterChange} 
+                />
+                <input 
+                    name="userId" 
+                    placeholder="User ID" 
+                    value={filter.userId} 
+                    onChange={handleFilterChange} 
+                />
+                <button onClick={() => setFilter({ rating: '', userId: '' })}>Clear Filters</button>
+            </div>
             <div className='m-10 bg-white h-3/4 w-11/12 flex flex-col rounded-3xl justify-around items-center'>
                 {reviews.map((review, index) => (
                     <div key={index} className='w-3/4 flex flex-col items-center'>
