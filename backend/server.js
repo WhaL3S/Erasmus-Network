@@ -16,9 +16,11 @@ app.use(express.json());
 
 // Import routes
 const messageRoutes = require('./routes/messageRoutes');
+const universityRoutes = require('./routes/universityRoutes');
 
 // Routes
 app.use('/api', messageRoutes);
+app.use('/api', universityRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

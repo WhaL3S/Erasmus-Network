@@ -1,0 +1,7 @@
+{
+    "overrideCommand": false,
+    "build": {
+        "dockerfile": "../Dockerfile"
+    },
+    "postCreateCommand": "echo 'Codespaces setup finished!'"
+}
