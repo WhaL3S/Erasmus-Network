@@ -8,16 +8,13 @@ const University = require('./universityModel');
 const Review = require('./reviewModel');  // Import the Review model
 const LogUniversity =  require('./logUniversityModel');
 // Define associations
-User.hasMany(Message, { foreignKey: 'sender', as: 'sentMessages' });
-Message.belongsTo(User, { as: 'senderDetails', foreignKey: 'sender' });
-// Define associations for Review
 //Review.belongsTo(Student, { foreignKey: 'fkStudentidUser', as: 'student' });
 //Review.belongsTo(University, { foreignKey: 'fkUniversityidUniversity', as: 'university' });
 
-Chat.belongsTo(User, { as: 'user1Details', foreignKey: 'user1' });
-Chat.belongsTo(User, { as: 'user2Details', foreignKey: 'user2' });
-Chat.hasMany(Message, { as: 'messages', foreignKey: 'chatId' });
-Message.belongsTo(Chat, { as: 'messageDetails', foreignKey: 'chatId' });
+Message.belongsTo(Chat, { foreignKey: 'fk_Chatid_Chat', as: 'chat' });
+Chat.belongsTo(User, { foreignKey: 'fk_Userid_User' });
+Chat.belongsTo(User, { foreignKey: 'fk_Userid_User2' });
+Chat.hasMany(Message, { foreignKey: 'fk_Chatid_Chat', as: 'messages' });
 
 University.hasMany(LogUniversity, {
   foreignKey: 'universityId',
