@@ -225,7 +225,7 @@ const Messenger = () => {
           </div>
           <div className="w-full h-5/6 flex flex-col items-start bg-white rounded-3xl border-black border">
             {chats.map((chat) => (
-              <React.Fragment key={chat.id}>
+              <React.Fragment key={chat.id_Chat}>
                 <div
                   className={`w-full h-1/4 flex justify-center items-center rounded-3xl cursor-pointer ${
                     selectedChat === chat ? "bg-gray-300" : ""
