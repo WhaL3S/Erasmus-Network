@@ -54,10 +54,10 @@ const getFilteredReviews = async (req, res) => {
             where: whereClause,
             include: [{ model: University, as: 'university' }]
         });
-        res.json(reviews);
+        res.json(reviews);  // Simplified response
     } catch (error) {
-        console.log(`Error: ${error}`);
-        res.status(400).send('Error fetching filtered reviews');
+        console.log(`Error: ${error}`);  // Log the error
+        res.status(400).send('Error fetching filtered reviews');  // Send a custom error message
     }
 };
 
