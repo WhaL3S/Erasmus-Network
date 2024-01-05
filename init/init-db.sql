@@ -224,9 +224,9 @@ INSERT INTO University_Representative (position, department, id_User, fk_Univers
 ('Admissions Officer', 'Admissions', 4, 1),
 ('Department Head', 'Computer Science', 5, 1);
 
-INSERT INTO Chat (name, fk_Studentid_User, fk_Universityid_University) VALUES 
-('Erasmus Chat 1', 1, 1),
-('Erasmus Chat 2', 2, 1);
+INSERT INTO Chat (name, fk_Userid1_User, fk_Userid2_User) VALUES 
+('Erasmus Chat 1', 1, 4),
+('Erasmus Chat 2', 1, 5);
 
 INSERT INTO Resume (url, title, file_type, dateTime, size, fk_Studentid_User) VALUES 
 ('http://example.com/resumes/emily.pdf', 'Emily Brown Resume', 'PDF', '2024-01-10 09:00:00', 500.0, 1),
@@ -240,9 +240,9 @@ INSERT INTO Application (motivation_letter, status, dateTime, fk_Studentid_User,
 ('I am passionate about computer science.', 'Submitted', '2024-01-22 12:00:00', 1, 1, 1),
 ('I am eager to learn and contribute.', 'Under Review', '2024-01-23 13:00:00', 2, 2, 1);
 
-INSERT INTO Message (text, timeSent, attachment, fk_Chatid_Chat, fk_Studentid_User) VALUES 
+INSERT INTO Message (text, timeSent, attachment, fk_Chatid_Chat, fk_Userid_User) VALUES 
 ('Hello, I have a question about the course.', '2024-01-25', NULL, 1, 1),
-('Can you tell me more about the faculty?', '2024-01-26', NULL, 2, 2);
+('Can you tell me more about the faculty?', '2024-01-26', NULL, 2, 1);
 
 INSERT INTO Evaluation (reason, dateTime, fk_University_representativeid_User, fk_Applicationid_Application) VALUES 
 ('Outstanding academic record', '2024-01-30 15:00:00', 4, 1),
