@@ -112,11 +112,11 @@ CREATE TABLE University_Representative (
 CREATE TABLE Chat (
     name VARCHAR(255),
     id_Chat INT AUTO_INCREMENT,
-    fk_Userid_User INT NOT NULL,
-    fk_Userid_User2 INT NOT NULL,
+    fk_Userid1_User INT NOT NULL,
+    fk_Userid2_User INT NOT NULL,
     PRIMARY KEY(id_Chat),
-    CONSTRAINT creates FOREIGN KEY(fk_Userid_User) REFERENCES User(id_User),
-    CONSTRAINT belongs FOREIGN KEY(fk_Userid_User2) REFERENCES User(id_User)
+    CONSTRAINT creates FOREIGN KEY(fk_Userid1_User) REFERENCES User(id_User),
+    CONSTRAINT belongs FOREIGN KEY(fk_Userid2_User) REFERENCES User(id_User)
 );
 
 CREATE TABLE Resume (
