@@ -6,7 +6,4 @@ const router = express.Router({ mergeParams: true }); // to access params from t
 router.get('/', reviewController.getReviewsForUniversity);
 router.post('/', reviewController.addReview);
 router.put('/:id', reviewController.editReview);
-
-// New route for filtered reviews
-router.get('/filtered', reviewController.getFilteredReviews);
 module.exports = router;

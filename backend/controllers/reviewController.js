@@ -3,10 +3,23 @@ const { Review, University } = require('../models');
 const getReviewsForUniversity = async (req, res) => {
     try {
         const universityId = req.params.universityId;
+        const { rating } = req.query; // Add more query parameters if needed
+
+        let whereClause = {
+            fkUniversityidUniversity: universityId
+        };
+
+        // Add filtering logic based on query parameters
+        if (rating) {
+            whereClause.rating = rating;
+        }
+
+        // Fetch reviews with or without filters
         const reviews = await Review.findAll({
-            where: { fkUniversityidUniversity: universityId },
+            where: whereClause,
             include: [{ model: University, as: 'university' }]
         });
+
         res.json(reviews);
     } catch (error) {
         console.log(`Error: ${error}`);
