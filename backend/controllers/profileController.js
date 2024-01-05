@@ -28,7 +28,36 @@ const openProfile = async (req, res) => {
       }
 };
 
+const deleteProfile = async (req, res) => {
+  const userId = parseInt(req.params.userId, 10);
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: 'Invalid user ID.' });
+  }
+  try {
+    const user = await User.findOne({
+      where: { id_user: userId },
+    });
+
+    var student = await Student.findOne({
+      where: { id_user: user.id_user },
+    });
+    await student.destroy();
+    var representator = await Representator.findOne({
+      where: { id_user: user.id_user },
+    });
+    await representator.destroy();
+    res.status(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const logoutUser = async (req, res) => {
+  
+};
 
 module.exports = {
     openProfile,
+    deleteProfile
   };
