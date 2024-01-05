@@ -112,11 +112,11 @@ CREATE TABLE University_Representative (
 CREATE TABLE Chat (
     name VARCHAR(255),
     id_Chat INT AUTO_INCREMENT,
-    fk_Studentid_User INT NOT NULL,
-    fk_Universityid_University INT NOT NULL,
+    fk_Userid_User INT NOT NULL,
+    fk_Userid_User2 INT NOT NULL,
     PRIMARY KEY(id_Chat),
-    CONSTRAINT creates FOREIGN KEY(fk_Studentid_User) REFERENCES Student(id_User),
-    CONSTRAINT belongs FOREIGN KEY(fk_Universityid_University) REFERENCES University(id_University)
+    CONSTRAINT creates FOREIGN KEY(fk_Userid_User) REFERENCES User(id_User),
+    CONSTRAINT belongs FOREIGN KEY(fk_Userid_User2) REFERENCES User(id_User)
 );
 
 CREATE TABLE Resume (
@@ -164,10 +164,10 @@ CREATE TABLE Message (
     attachmentName VARCHAR(255),
     id_Message INT AUTO_INCREMENT,
     fk_Chatid_Chat INT NOT NULL,
-    fk_Studentid_User INT NOT NULL,
+    fk_Userid_User INT NOT NULL,
     PRIMARY KEY(id_Message),
     CONSTRAINT write_Message FOREIGN KEY(fk_Chatid_Chat) REFERENCES Chat(id_Chat),
-    CONSTRAINT belongs_to_Message FOREIGN KEY(fk_Studentid_User) REFERENCES Student(id_User)
+    CONSTRAINT belongs_to_Message FOREIGN KEY(fk_Userid_User) REFERENCES User(id_User)
 );
 
 CREATE TABLE Evaluation (
