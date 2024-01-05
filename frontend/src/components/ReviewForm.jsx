@@ -10,7 +10,7 @@ const ReviewForm = ({ reviewData, onSuccess }) => {
         const endpoint = reviewData ? `/reviews/${reviewData.id}` : '/reviews';
         const method = reviewData ? 'put' : 'post';
         try {
-            const response = await axios[method]('http://localhost:3001/api' + endpoint, { text, rating });
+            const response = await axios[method]('${process.env.REACT_APP_API_URL}/api' + endpoint, { text, rating });
             onSuccess(response.data);
         } catch (error) {
             console.error('Error submitting review:', error);
