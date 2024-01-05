@@ -15,7 +15,7 @@ const Chat = sequelize.define('Chat', {
   fk_Userid_User: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'fk_Userid_User',
+    field: 'fk_Userid1_User',
     references: {
       model: 'User',
       key: 'id_User',
@@ -24,7 +24,7 @@ const Chat = sequelize.define('Chat', {
   fk_Userid_User2: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'fk_Userid_User2',
+    field: 'fk_Userid2_User',
     references: {
       model: 'User',
       key: 'id_User',

@@ -14,7 +14,7 @@ const Messenger = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
-  const userId = 3;
+  const userId = 1;
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/users/${userId}/chats`)
