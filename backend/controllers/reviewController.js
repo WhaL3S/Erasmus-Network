@@ -1,61 +1,63 @@
-const { Review, User, University } = require('../models');
+const { Review, University } = require('../models');
 
 const getReviewsForUniversity = async (req, res) => {
     try {
         const universityId = req.params.universityId;
         const reviews = await Review.findAll({
-            where: { fk_Universityid_University: universityId },
-            include: ['student', 'university']
+            where: { fkUniversityidUniversity: universityId },
+            include: [{ model: University, as: 'university' }]
         });
-        res.status(200).json(reviews);
+        res.json(reviews);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.log(`Error: ${error}`);
+        res.status(500).send('Error fetching reviews for university');
     }
 };
 
 const addReview = async (req, res) => {
     try {
-        const { text, rating, userId, universityId } = req.body;
-        const newReview = await Review.create({ text, rating, userId, universityId });
+        const { text, rating, fkStudentidUser, fkUniversityidUniversity } = req.body;
+        const newReview = await Review.create({ text, rating, fkStudentidUser, fkUniversityidUniversity });
         res.status(201).json(newReview);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.log(`Error: ${error}`);
+        res.status(400).send('Error adding review');
     }
 };
 
 const editReview = async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id);
         const { text, rating } = req.body;
         const review = await Review.findByPk(id);
-        if (review) {
-            review.text = text;
-            review.rating = rating;
-            await review.save();
-            res.status(200).json(review);
-        } else {
-            res.status(404).send('Review not found');
+
+        if (!review) {
+            return res.status(404).send('Review not found');
         }
+
+        await review.update({ text, rating });
+        res.json(review);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.log(`Error: ${error}`);
+        res.status(400).send('Error editing review');
     }
 };
 
 const getFilteredReviews = async (req, res) => {
     try {
-        const { rating, universityId, userId } = req.query;
-        let whereClause = {};
+        const { rating, universityId } = req.query;
+        const whereClause = {};
         if (rating) whereClause.rating = rating;
         if (universityId) whereClause.fkUniversityidUniversity = universityId;
-        if (userId) whereClause.fkStudentidUser = userId;
 
         const reviews = await Review.findAll({ 
             where: whereClause,
-            include: [{ model: User, as: 'user' }, { model: University, as: 'university' }]
+            include: [{ model: University, as: 'university' }]
         });
-        res.status(200).json(reviews);
+        res.json(reviews);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.log(`Error: ${error}`);
+        res.status(400).send('Error fetching filtered reviews');
     }
 };
 

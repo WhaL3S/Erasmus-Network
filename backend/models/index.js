@@ -8,9 +8,9 @@ const University = require('./universityModel');
 const Review = require('./reviewModel');  // Import the Review model
 const LogUniversity =  require('./logUniversityModel');
 // Define associations
-//Review.belongsTo(Student, { foreignKey: 'fkStudentidUser', as: 'student' });
-//Review.belongsTo(University, { foreignKey: 'fkUniversityidUniversity', as: 'university' });
-
+Review.belongsTo(Student, { foreignKey: 'fkStudentidUser', as: 'student' });
+Review.belongsTo(University, { foreignKey: 'fkUniversityidUniversity', as: 'university' });
+Review.belongsTo(User, { foreignKey: 'fkStudentidUser', as: 'user' });
 Message.belongsTo(Chat, { foreignKey: 'fk_Chatid_Chat', as: 'chat' });
 Chat.belongsTo(User, { foreignKey: 'fk_Userid_User' });
 Chat.belongsTo(User, { foreignKey: 'fk_Userid_User2' });

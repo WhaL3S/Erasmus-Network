@@ -17,7 +17,7 @@ const University = () => {
     useEffect(() => {
         const fetchUniversity = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/api/universities/${universityId}`);
+                const response = await axios.get(`https://glowing-yodel-w6vvrw57w439pwj-3001.app.github.dev:3001/api/universities/${universityId}`);
                 setUniversity(response.data);
             } catch (error) {
                 console.error('Error fetching university details', error);
@@ -40,7 +40,7 @@ const University = () => {
     const [actionLogs, setActionLogs] = useState([]);
     const openActionLogDialog = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/api/logs/${universityId}`);
+            const response = await axios.get(`https://glowing-yodel-w6vvrw57w439pwj-3001.app.github.dev/api/logs/${universityId}`);
             setActionLogs(response.data);
             setActionLogDialogOpen(true);
         } catch (error) {
@@ -50,7 +50,7 @@ const University = () => {
     const closeActionLogDialog = () => setActionLogDialogOpen(false);
 
     const handleDelete = () => {
-        axios.delete(`http://localhost:3001/api/universities/${universityId}`)
+        axios.delete(`https://glowing-yodel-w6vvrw57w439pwj-3001.app.github.dev/api/universities/${universityId}`)
             .then(response => {
                 // Handle the successful deletion
                 navigate('/universities');
@@ -62,7 +62,7 @@ const University = () => {
     };
 
     const handleSave = (updatedUniversity) => {
-        axios.put(`http://localhost:3001/api/universities/${updatedUniversity.id_University}`, updatedUniversity)
+        axios.put(`https://glowing-yodel-w6vvrw57w439pwj-3001.app.github.dev/api/universities/${updatedUniversity.id_University}`, updatedUniversity)
             .then(response => {
                 setUniversity(response.data);
                 closeEditDialog();
