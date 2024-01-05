@@ -17,7 +17,7 @@ const Reviews = () => {
             });
 
             try {
-                const response = await axios.get(`http://localhost:5000/api/universities/${universityId}/reviews/filtered?${queryParameters}`);
+                const response = await axios.get(`http://localhost:3001/api/universities/${universityId}/reviews/filtered?${queryParameters}`);
                 setReviews(response.data);
             } catch (error) {
                 console.error('Error fetching data: ', error);
