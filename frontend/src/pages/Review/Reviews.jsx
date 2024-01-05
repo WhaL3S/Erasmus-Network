@@ -10,21 +10,21 @@ const Reviews = () => {
     const { universityId } = useParams();
 
     useEffect(() => {
-        const fetchFilteredReviews = async () => {
+        const fetchReviews = async () => {
             const queryParams = new URLSearchParams({
-                ...filter, // Assuming filter contains rating and userId
+                ...filter, // Assuming 'filter' contains your filtering criteria like rating
             });
     
             try {
-                const url = `${process.env.REACT_APP_API_URL}/universities/${universityId}/reviews/filtered?${queryParams}`;
+                const url = `${process.env.REACT_APP_API_URL}/universities/${universityId}/reviews?${queryParams}`;
                 const response = await axios.get(url);
                 setReviews(response.data);
             } catch (error) {
-                console.error('Error fetching filtered reviews: ', error);
+                console.error('Error fetching reviews: ', error);
             }
         };
     
-        fetchFilteredReviews();
+        fetchReviews();
     }, [universityId, filter]);
 
     const renderStars = (rating) => {
