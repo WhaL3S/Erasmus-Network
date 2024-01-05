@@ -1,11 +1,15 @@
 const { Chat, Message } = require('../models');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 const createChat = async (req, res) => {
-  const { user1, user2 } = req.body;
+  const { fk_Userid_User, fk_Userid_User2 } = req.body;
 
   try {
-    const newChat = await Chat.create({ user1, user2 });
+    const newChat = await Chat.create({
+      fk_Userid_User,
+      fk_Userid_User2,
+    });
+
     res.json(newChat);
   } catch (error) {
     console.error(error);
@@ -22,7 +26,12 @@ const getChatsByUserId = async (req, res) => {
 
   try {
     const userChats = await Chat.findAll({
-      where: { [Op.or]: [{ user1: userId }, { user2: userId }] },
+      where: {
+        [Op.or]: [
+          { fk_Userid_User: userId },
+          { fk_Userid_User2: userId },
+        ],
+      },
       include: [{ model: Message, as: 'messages' }],
       timestamps: false,
     });
@@ -43,7 +52,7 @@ const getMessagesByChatId = async (req, res) => {
 
   try {
     const messages = await Message.findAll({
-      where: { chatId },
+      where: { fk_Chatid_Chat: chatId }, // Adjust to match the foreign key in the Message model
     });
 
     res.json(messages);
@@ -53,27 +62,35 @@ const getMessagesByChatId = async (req, res) => {
   }
 };
 
-
 const sendMessage = async (req, res) => {
   const text = req.body.text;
-  const attachmentName = req.body.attachmentName;
+  let attachmentName = req.body.attachmentName;
   const attachment = req.file;
   const chatId = parseInt(req.params.chatId, 10);
-  const senderId = 1;
+  const userId = req.body.userId; // Assuming senderId is hard-coded for demonstration
 
-  if (isNaN(chatId) || !senderId) {
+  if (isNaN(chatId) || isNaN(userId)) {
     return res.status(400).json({ error: 'Invalid chat ID or sender ID.' });
   }
 
   try {
-    const base64Attachment = attachment.buffer.toString('base64');
+    let base64Attachment = null;
+
+    if (attachmentName === "undefined") {
+      attachmentName = null;
+    }
+
+    if (attachment !== undefined) {
+      base64Attachment = attachment.buffer.toString('base64');
+    }
 
     const newMessage = await Message.create({
       text,
       attachment: base64Attachment,
       attachmentName,
-      chatId,
-      sender: senderId,
+      fk_Chatid_Chat: chatId,
+      fk_Userid_User: userId,
+      timeSent: Sequelize.literal('CURRENT_DATE'),
     });
 
     res.json(newMessage);
@@ -92,7 +109,11 @@ const editMessage = async (req, res) => {
   }
 
   try {
-    const updatedMessage = await Message.update({ text, attachment }, { where: { id: messageId } });
+    const updatedMessage = await Message.update(
+      { text, attachment },
+      { where: { id_Message: messageId } } 
+    );
+
     res.json(updatedMessage);
   } catch (error) {
     console.error(error);
@@ -102,22 +123,26 @@ const editMessage = async (req, res) => {
 
 const deleteMessage = async (req, res) => {
   const messageId = parseInt(req.params.messageId, 10);
-  const senderId = 1;
 
-  if (isNaN(messageId) || isNaN(senderId)) {
+  if (isNaN(messageId)) {
     return res.status(400).json({ error: 'Invalid message ID or sender ID.' });
   }
 
   try {
     const message = await Message.findByPk(messageId);
 
-    if (!message || message.sender !== senderId) {
-      return res.status(403).json({ error: 'You are not authorized to delete this message.' });
+    if (!message) {
+      return res
+        .status(404)
+        .json({ error: 'No such message found.' });
     }
 
-    await Message.destroy({ where: { id: messageId } });
+    await Message.destroy({ where: { id_Message: messageId } });
 
-    res.json({ success: true, message: 'Message deleted successfully.' });
+    res.json({
+      success: true,
+      message: 'Message deleted successfully.',
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -130,5 +155,5 @@ module.exports = {
   getMessagesByChatId,
   sendMessage,
   editMessage,
-  deleteMessage
+  deleteMessage,
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Navbar from "../../components/Navbar";
 import { BlobServiceClient } from "@azure/storage-blob";
 import axios from "axios";
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 
 const Messenger = () => {
   const [chats, setChats] = useState([]);
@@ -10,10 +10,11 @@ const Messenger = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [editingMessage, setEditingMessage] = useState(null);
-  const userId = 1;
   const messagesEndRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
+
+  const userId = 3;
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/users/${userId}/chats`)
@@ -24,12 +25,12 @@ const Messenger = () => {
 
   useEffect(() => {
     if (selectedChat) {
-      fetch(`http://localhost:5000/api/chats/${selectedChat.id}/messages`)
+      fetch(`http://localhost:5000/api/chats/${selectedChat.id_Chat}/messages`)
         .then((response) => response.json())
         .then((data) => setMessages(data))
         .catch((error) => console.error("Error fetching messages:", error));
     }
-  }, [selectedChat, editingMessage]);
+  }, [selectedChat, editingMessage, newMessage]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -49,12 +50,13 @@ const Messenger = () => {
 
     const formData = new FormData();
     formData.append("attachment", selectedFile);
-    formData.append("attachmentName", selectedFile.name);
+    formData.append("attachmentName", selectedFile?.name);
     formData.append("text", newMessage);
-    
+    formData.append("userId", userId);
+
     axios
       .post(
-        `http://localhost:5000/api/chats/${selectedChat.id}/messages`,
+        `http://localhost:5000/api/chats/${selectedChat.id_Chat}/messages`,
         formData,
         {
           headers: { "Content-type": "multipart/form-data" },
@@ -76,7 +78,7 @@ const Messenger = () => {
 
   const handleSaveEdit = () => {
     if (editingMessage) {
-      fetch(`http://localhost:5000/api/messages/${editingMessage.id}`, {
+      fetch(`http://localhost:5000/api/messages/${editingMessage.id_Message}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +88,7 @@ const Messenger = () => {
         .then((response) => response.json())
         .then((data) => {
           const updatedMessages = messages.map((msg) =>
-            msg.id === editingMessage.id ? data : msg
+            msg.id === editingMessage.id_Message ? data : msg
           );
           setMessages(updatedMessages);
           setEditingMessage(null);
@@ -101,7 +103,9 @@ const Messenger = () => {
       method: "DELETE",
     })
       .then(() => {
-        const updatedMessages = messages.filter((msg) => msg.id !== messageId);
+        const updatedMessages = messages.filter(
+          (msg) => msg.id_Message !== messageId
+        );
         setMessages(updatedMessages);
       })
       .catch((error) => console.error("Error deleting message:", error));
@@ -127,7 +131,7 @@ const Messenger = () => {
       "image/jpg",
       "image/jpeg",
     ];
-    const maxSize = 1024 * 1024; 
+    const maxSize = 1024 * 1024;
 
     if (!allowedTypes.includes(file.type) || file.size > maxSize) {
       alert(
@@ -165,35 +169,36 @@ const Messenger = () => {
     }
   };
 
-
   const downloadAttachment = (attachmentData, attachmentName) => {
     try {
-      const base64Data = Buffer.from(attachmentData).toString('base64');
-      const binaryData = Uint8Array.from(atob(base64Data), (char) => char.charCodeAt(0));
-  
-      const fileExtension = attachmentName.split('.').pop().toLowerCase();
-      
+      const base64Data = Buffer.from(attachmentData).toString("base64");
+      const binaryData = Uint8Array.from(atob(base64Data), (char) =>
+        char.charCodeAt(0)
+      );
+
+      const fileExtension = attachmentName.split(".").pop().toLowerCase();
+
       let contentType;
-  
+
       switch (fileExtension) {
-        case 'pdf':
-          contentType = 'application/pdf';
+        case "pdf":
+          contentType = "application/pdf";
           break;
-        case 'doc':
-        case 'docx':
-          contentType = 'application/msword';
+        case "doc":
+        case "docx":
+          contentType = "application/msword";
           break;
-        case 'jpg':
-        case 'jpeg':
-          contentType = 'image/jpeg';
+        case "jpg":
+        case "jpeg":
+          contentType = "image/jpeg";
           break;
-        case 'png':
-          contentType = 'image/png';
+        case "png":
+          contentType = "image/png";
           break;
         default:
-          contentType = 'application/octet-stream';
+          contentType = "application/octet-stream";
       }
-  
+
       const blob = new Blob([binaryData], { type: contentType });
 
       const url = window.URL.createObjectURL(blob);
@@ -208,7 +213,6 @@ const Messenger = () => {
       console.error("Error downloading attachment:", error);
     }
   };
-  
 
   return (
     <div className="bg-gray-200 h-screen">
@@ -228,7 +232,7 @@ const Messenger = () => {
                   }`}
                   onClick={() => handleChatClick(chat)}
                 >
-                  <h3>{chat.user1 === userId ? chat.user2 : chat.user1}</h3>
+                  <h3>{chat.name}</h3>
                 </div>
                 <hr className="border-none h-px bg-black" />
               </React.Fragment>
@@ -241,11 +245,7 @@ const Messenger = () => {
             // Display messages for the selected chat
             <>
               <div className="w-full h-1/6 flex justify-center items-center justify-self-center border-black border bg-white rounded-3xl">
-                <h1>
-                  {selectedChat.user2 === userId
-                    ? selectedChat.user1
-                    : selectedChat.user2}
-                </h1>
+                <h1>{selectedChat.name}</h1>
               </div>
 
               <div className="w-full h-5/6 flex flex-col space-y-6 overflow-hidden">
@@ -253,35 +253,47 @@ const Messenger = () => {
                 <div className="w-full h-5/6 flex flex-col items-start border-black border bg-white rounded-3xl overflow-y-scroll p-4">
                   {messages.map((message) => (
                     <div
-                      key={message.id}
+                      key={message.id_Message}
                       className={`mb-2 p-2 rounded-md ${
-                        message.sender === userId
-                          ? "bg-blue-200 text-right"
-                          : "bg-gray-200 text-left"
+                        message.fk_Userid_User === userId
+                          ? "bg-blue-200 ml-auto"
+                          : "bg-gray-200 mr-auto"
                       }`}
                     >
                       {/* Display text message */}
                       {message.text && <span>{message.text}</span>}
                       {/* Display attachment link */}
                       {message.attachment && (
-                         <span>
-                         | Attachment: 
-                         <button
-                           onClick={() =>
-                             downloadAttachment(message.attachment, message.attachmentName)
-                           }
-                         >
-                           {message.attachmentName}
-                         </button>
-                       </span>
+                        <>
+                          <span>
+                            {" "}
+                            | Attachment:
+                            {" "}
+                            <button
+                              onClick={() =>
+                                downloadAttachment(
+                                  message.attachment,
+                                  message.attachmentName
+                                )
+                              }
+                            >
+                              {message.attachmentName}
+                            </button>
+                          </span>
+                        </>
                       )}
-                      {message.sender === userId && (
-                        <div className="flex space-x-2 mt-1">
+                      {/* Display attachment link */}
+                      {message.timeSent && <span> | {message.timeSent.toLocaleString()}</span>}
+
+                      {message.fk_Userid_User === userId && (
+                        <div className="flex space-x-2 mt-1  justify-end">
                           <button onClick={() => handleEditMessage(message)}>
                             Edit
                           </button>
                           <button
-                            onClick={() => handleDeleteMessage(message.id)}
+                            onClick={() =>
+                              handleDeleteMessage(message.id_Message)
+                            }
                           >
                             Delete
                           </button>
@@ -309,7 +321,7 @@ const Messenger = () => {
                     </button>
                     {selectedFile && (
                       <button
-                        className="absolute top-0 right-0 p-1 text-red-600 hover:text-red-800"
+                        className="absolute top-0 right-0 pr-1 text-red-600 hover:text-red-800"
                         onClick={() => setSelectedFile(null)}
                       >
                         x

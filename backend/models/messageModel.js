@@ -1,16 +1,12 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
-const User = require('./userModel');
-const Chat = require('./chatModel');
 
 const Message = sequelize.define('Message', {
-  sender: {
+  id_Message: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-      model: User,
-      key: 'id',
-    },
+    primaryKey: true,
+    autoIncrement: true,
   },
   text: {
     type: DataTypes.STRING,
@@ -24,16 +20,32 @@ const Message = sequelize.define('Message', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  chatId: {
+  timeSent: {
+    type: DataTypes.DATEONLY,
+    allowNull: true,
+  },
+  fk_Chatid_Chat: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'fk_Chatid_Chat', 
     references: {
-      model: Chat,
-      key: 'id',
+      model: 'Chat',
+      key: 'id_Chat',
     },
   },
-},{
-    timestamps: false
+  fk_Userid_User: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'fk_Userid_User', 
+    references: {
+      model: 'User',
+      key: 'id_User',
+    },
+  },
+}, {
+  timestamps: false,
+  tableName: 'Message',
 });
+
 
 module.exports = Message;
