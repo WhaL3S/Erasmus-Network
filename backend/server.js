@@ -13,7 +13,7 @@ app.use(express.json());
 // Import routes
 const messageRoutes = require('./routes/messageRoutes');
 const universityRoutes = require('./routes/universityRoutes');
-//const reviewRoutes = require('./routes/reviewRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // Routes
 app.use('/api', messageRoutes);

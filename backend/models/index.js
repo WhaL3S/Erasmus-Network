@@ -14,8 +14,10 @@ Review.belongsTo(User, { foreignKey: 'fkStudentidUser', as: 'user' });
 Message.belongsTo(Chat, { foreignKey: 'fk_Chatid_Chat', as: 'chat' });
 Chat.belongsTo(User, { foreignKey: 'fk_Userid_User' });
 Chat.belongsTo(User, { foreignKey: 'fk_Userid_User2' });
-Chat.hasMany(Message, { foreignKey: 'fk_Chatid_Chat', as: 'messages' });
+Student.belongsTo(User, { foreignKey: 'id_User', as: 'user' });
 
+Chat.hasMany(Message, { foreignKey: 'fk_Chatid_Chat', as: 'messages' });
+User.hasMany(Student, { foreignKey: 'id_User', as: 'students' });
 University.hasMany(LogUniversity, {
   foreignKey: 'universityId',
   onDelete: 'CASCADE'

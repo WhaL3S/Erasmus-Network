@@ -5,9 +5,6 @@ const router = express.Router();
 const universityController = require('../controllers/universityController');
 const { getUniversityLogs } = require('../services/universityServices');
 
-// uni reviews - Tomas
-router.use('/universities/:universityId/reviews', reviewRoutes);
-
 // Routes
 router.get('/coordinates', async (req, res) => {
     const { city, country } = req.query;
@@ -39,5 +36,6 @@ router.get('/universities', universityController.getUniversities);
 router.get('/universities/:id', universityController.getUniversityById);
 router.put('/universities/:id', universityController.updateUniversity);
 router.delete('/universities/:id', universityController.deleteUniversity);
-
+// AAAA
+router.use('/universities/:universityId/reviews', reviewRoutes);
 module.exports = router;

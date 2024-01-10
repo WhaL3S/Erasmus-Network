@@ -46,7 +46,7 @@ const ViewAsList = () => {
                             <p><strong>Location:</strong> {university.city}, {university.country}</p>
                             <p><strong>Rating:</strong> {university.rating}</p>
                             <div className='mt-2'>
-                                <Link className='text-xl text-blue-600 hover:text-blue-800' to={`/universities/${university.id}/reviews`}>View Reviews</Link>
+                                <Link className='text-xl text-blue-600 hover:text-blue-800' to={`/universities/${university.id_University}/reviews`}>View Reviews</Link>
                             </div>
                         </div>
                     ))}

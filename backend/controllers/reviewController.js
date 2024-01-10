@@ -1,24 +1,42 @@
-const { Review, University, Student } = require('../models');
+const { Review, University, Student, User } = require('../models');
 
 const getReviewsForUniversity = async (req, res) => {
     try {
         const universityId = req.params.universityId;
-        const { rating } = req.query;
+        const { rating, userName, reviewText } = req.query;
 
-        let whereClause = {
-            fkUniversityidUniversity: universityId
-        };
+        let whereClause = { fkUniversityidUniversity: universityId };
+        let userWhereClause = {};
+        let reviewWhereClause = {};
 
         if (rating) {
             whereClause.rating = rating;
         }
 
+        if (userName) {
+            // Assuming 'name' is the field in User model
+            userWhereClause.name = { [sequelize.Op.like]: `%${userName}%` };
+        }
+
+        if (reviewText) {
+            reviewWhereClause.text = { [sequelize.Op.like]: `%${reviewText}%` };
+        }
+
         // Fetch reviews with or without filters
         const reviews = await Review.findAll({
-            where: whereClause,
+            where: reviewWhereClause,
             include: [
                 { model: University, as: 'university' },
-                { model: Student, as: 'student' } // Include the Student model
+                {
+                    model: Student, 
+                    as: 'student',
+                    include: [{ 
+                        model: User, 
+                        as: 'user',
+                        where: userWhereClause,
+                        required: !!userName // Apply this only if userName filter is used
+                    }]
+                }
             ]
         });
 
