@@ -1,46 +1,34 @@
 const { Review, University, Student, User } = require('../models');
-
 const getReviewsForUniversity = async (req, res) => {
     try {
         const universityId = req.params.universityId;
         const { rating, userName, reviewText } = req.query;
 
-        let whereClause = { fkUniversityidUniversity: universityId };
-        let userWhereClause = {};
-        let reviewWhereClause = {};
-
-        if (rating) {
-            whereClause.rating = rating;
-        }
-
-        if (userName) {
-            // Assuming 'name' is the field in User model
-            userWhereClause.name = { [sequelize.Op.like]: `%${userName}%` };
-        }
-
-        if (reviewText) {
-            reviewWhereClause.text = { [sequelize.Op.like]: `%${reviewText}%` };
-        }
-
-        // Fetch reviews with or without filters
+        // Fetch reviews without filters for userName and reviewText
         const reviews = await Review.findAll({
-            where: reviewWhereClause,
+            where: { fkUniversityidUniversity: universityId, ...(rating && { rating }) },
             include: [
                 { model: University, as: 'university' },
                 {
-                    model: Student, 
+                    model: Student,
                     as: 'student',
-                    include: [{ 
-                        model: User, 
+                    include: {
+                        model: User,
                         as: 'user',
-                        where: userWhereClause,
-                        required: !!userName // Apply this only if userName filter is used
-                    }]
+                        attributes: { exclude: ['password'] },
+                    }
                 }
             ]
         });
 
-        res.json(reviews);
+        // Filter the results based on userName and reviewText
+        const filteredReviews = reviews.filter(review => {
+            const userFullName = `${review.student.user.name} ${review.student.user.surname}`;
+            return (!userName || userFullName.toLowerCase().includes(userName.toLowerCase())) &&
+                   (!reviewText || review.text.toLowerCase().includes(reviewText.toLowerCase()));
+        });
+
+        res.json(filteredReviews);
     } catch (error) {
         console.log(`Error: ${error}`);
         res.status(500).send('Error fetching reviews for university');
@@ -50,7 +38,8 @@ const getReviewsForUniversity = async (req, res) => {
 const addReview = async (req, res) => {
     try {
         const { text, rating, fkStudentidUser, fkUniversityidUniversity } = req.body;
-        const newReview = await Review.create({ text, rating, fkStudentidUser, fkUniversityidUniversity });
+        const currentDate = new Date().toISOString().split('T')[0];
+        const newReview = await Review.create({ text, rating, fkStudentidUser, fkUniversityidUniversity, timeCreated: currentDate });
         res.status(201).json(newReview);
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -60,7 +49,7 @@ const addReview = async (req, res) => {
 
 const editReview = async (req, res) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.reviewId);
         const { text, rating } = req.body;
         const review = await Review.findByPk(id);
 
@@ -75,28 +64,32 @@ const editReview = async (req, res) => {
         res.status(400).send('Error editing review');
     }
 };
-
-const getFilteredReviews = async (req, res) => {
+const deleteReview = async (req, res) => {
     try {
-        const { rating, universityId } = req.query;
-        const whereClause = {};
-        if (rating) whereClause.rating = rating;
-        if (universityId) whereClause.fkUniversityidUniversity = universityId;
+        const id = parseInt(req.params.id);
 
-        const reviews = await Review.findAll({ 
-            where: whereClause,
-            include: [{ model: University, as: 'university' }]
-        });
-        res.json(reviews);  // Simplified response
+        // Validate the review ID
+        if (isNaN(id)) {
+            return res.status(400).send('Invalid review ID');
+        }
+
+        // Find the review by ID
+        const review = await Review.findByPk(id);
+        if (!review) {
+            return res.status(404).send('Review not found');
+        }
+
+        // Delete the review
+        await review.destroy();
+        res.status(200).send(`Review with ID ${id} successfully deleted`);
     } catch (error) {
-        console.log(`Error: ${error}`);  // Log the error
-        res.status(400).send('Error fetching filtered reviews');  // Send a custom error message
+        console.log(`Error: ${error}`);
+        res.status(500).send('Error deleting review');
     }
 };
-
 module.exports = {
     getReviewsForUniversity,
     addReview,
     editReview,
-    getFilteredReviews
+    deleteReview,
 };
